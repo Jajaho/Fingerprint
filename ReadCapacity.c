@@ -1,4 +1,4 @@
-// new code by K.-H. Kübbeler
+// new code by K.-H. Kï¿½bbeler
 // ReadCapacity tries to find the value of a capacitor by measuring the load time.
 // first of all the capacitor is discharged.
 // Then a series of up to 500 load pulses with 10ms duration each is done across the R_L (680Ohm)
@@ -22,7 +22,7 @@
 // cap.cval = value of the capacitor 
 // cap.cval_uncorrected = value of the capacitor uncorrected
 // cap.esr = serial resistance of capacitor,  0.01 Ohm units
-// cap.cpre = units of cap.cval (-12==pF, -9=nF, -6=µF)
+// cap.cpre = units of cap.cval (-12==pF, -9=nF, -6=ï¿½F)
 // ca   = Pin number (0-2) of the LowPin
 // cb   = Pin number (0-2) of the HighPin
 
@@ -35,17 +35,17 @@
 void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   // check if capacitor and measure the capacity value
   unsigned int tmpint;
-//  unsigned int adcv[4];
+  //  unsigned int adcv[4];
   int residual_voltage;
   int cap_voltage1;
   int cap_voltage2;
-#ifdef INHIBIT_SLEEP_MODE
-  unsigned int ovcnt16;
-#endif
-  uint8_t HiPinR_L, HiPinR_H;
-  uint8_t LoPinR_L;
-  uint8_t LoADC;
-  uint8_t ii;
+  #ifdef INHIBIT_SLEEP_MODE
+    unsigned int ovcnt16;
+  #endif
+    uint8_t HiPinR_L, HiPinR_H;
+    uint8_t LoPinR_L;
+    uint8_t LoADC;
+    uint8_t ii;
 
 #if PROCESSOR_TYP == 666644  /* ########## not yet finshised ################ */
   if (HighPin == TestCapPin) {
@@ -170,7 +170,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   if ((ovcnt16 == 0 ) && (cap_voltage1 > 1300)) {
      goto messe_mit_rh;		// Voltage of more than 1300mV is reached in one pulse, too fast loaded
   }
-  // Capacity is more than about 50µF
+  // Capacity is more than about 50ï¿½F
 #ifdef NO_CAP_HOLD_TIME
   ChargePin10ms(HiPinR_H,0);		//switch HighPin with R_H 10ms auf GND, then currentless
   cap_voltage2 = ReadADC(HighPin) - residual_voltage;	// read voltage again, is discharged only a little bit ?
@@ -255,7 +255,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 //==================================================================================
 // Measurement of little capacity values
 messe_mit_rh:
-  //little capacity value, about  < 50 µF
+  //little capacity value, about  < 50 ï¿½F
   EntladePins();			// discharge capacitor
   //measure with the R_H (470kOhm) resistor 
   R_PORT = 0;		// R_DDR ist HiPinR_L
