@@ -47,16 +47,6 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
     uint8_t LoADC;
     uint8_t ii;
 
-#if PROCESSOR_TYP == 666644  /* ########## not yet finshised ################ */
-  if (HighPin == TestCapPin) {
-     // special handling for build in calibration capacitor
-     ADC_PORT = TXD_VAL;		// switch ADC-Port to GND
-     ADC_DDR = (1<<TestCapPin) | TXD_MSK;	// switch capacitor-Pin to output (GND)
-     wait_about20ms();
-     ADC_DDR = TXD_MSK;			// switch all ADC to input 
-     residual_voltage = ReadADC(HighPin);		// voltage before any load 
-  }
-#endif
 
 #ifdef AUTO_CAL
   pin_combination = ((HighPin - TP_MIN) * 3) + LowPin - TP_MIN - 1;	// coded Pin combination for capacity zero offset
@@ -72,31 +62,11 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   LoADC = pgm_read_byte((&PinRLRHADCtab[3])+LowPin-TP_MIN) | TXD_MSK;
 #endif
 
-#if DebugOut == 10
-  lcd_line3();
-  lcd_clear_line();
-  lcd_line3();
-  lcd_testpin(LowPin);
-  lcd_data('C');
-  lcd_testpin(HighPin);
-  lcd_space();
-#endif
-  if(PartFound == PART_RESISTOR) {
-#if DebugOut == 10
-     lcd_data('R');
-     wait_about2s();	/* debug delay */
-#endif
-     return;	//We have found a resistor already 
-  }
-  for (ii=0;ii<NumOfDiodes;ii++) {
-     if ((diodes.Cathode[ii] == LowPin) && (diodes.Anode[ii] == HighPin) && (diodes.Voltage[ii] < 1500)) {
-#if DebugOut == 10
-        lcd_data('D');	// debug
-        wait_about2s();	/* debug delay */
-#endif
-        return;
-     }
-  }
+for (ii=0;ii<NumOfDiodes;ii++) {
+    if ((diodes.Cathode[ii] == LowPin) && (diodes.Anode[ii] == HighPin) && (diodes.Voltage[ii] < 1500)) {
+      return;
+    }
+}
   
 #if FLASHEND > 0x1fff
   unsigned int vloss;	// lost voltage after load pulse in 0.1% 
@@ -153,16 +123,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      }
   }  /* end for ovcnt16 */
   // wait 5ms and read voltage again, does the capacitor keep the voltage?
-#if DebugOut == 10
-  DisplayValue16(ovcnt16,0,' ',4);
-  Display_mV(cap_voltage1,4);
-#endif
   if (cap_voltage1 <= MIN_VOLTAGE) {
-#if DebugOut == 10
-     lcd_data('K');
-     lcd_space();
-     wait1s();		// debug delay
-#endif
 //     if (NumOfDiodes != 0) goto messe_mit_rh; /* ****************************** */
      goto keinC;		// was never charged enough, >100mF or shorted
   }
@@ -213,11 +174,6 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 #endif
   if (cap_voltage2 > 200) {
      // more than 200mV is lost during load time
- #if DebugOut == 10
-     lcd_data('L');
-     lcd_space();
-     wait_about1s();	/* debug delay */
- #endif
 //     if (ovcnt16 == 0 )  {
 //        goto messe_mit_rh;		// Voltage of more than 300mV is reached in one pulse, but not hold
 //     }
@@ -395,39 +351,20 @@ messe_mit_rh:
  #if FLASHEND > 0x3fff
        if ((cap.cval+C_LIMIT_TO_UNCALIBRATED) < tmpint) {
          mark_as_uncalibrated();	// set in EEprom to uncalibrated
-  #if DebugOut == 11
-         lcd_line3();
-         lcd_testpin(LowPin);
-         lcd_data('y');
-         lcd_testpin(HighPin);
-         lcd_space();
-  #endif
        }
  #endif
-         cap.cval = 0;			//unsigned long may not reach negativ value
+         cap.cval = 0;			//unsigned long may not reach negative value
      }
 #else  /* no AUTO_CAL */
      if (HighPin == TP2) cap.cval += TP2_CAP_OFFSET;	// measurements with TP2 have 2pF less capacity
      if (cap.cval > C_NULL) {
          cap.cval -= C_NULL;		//subtract constant offset (pF)
      } else {
-         cap.cval = 0;			//unsigned long may not reach negativ value
+         cap.cval = 0;			//unsigned long may not reach negative value
      }
 #endif
   } /* end if (cap.cpre == -12) */
 
-#if DebugOut == 10
-  R_DDR = 0;			// switch all resistor ports to input
-  lcd_line4();
-  lcd_clear_line();
-  lcd_line4();
-  lcd_testpin(LowPin);
-  lcd_data('c');
-  lcd_testpin(HighPin);
-  lcd_space();
-  DisplayValue(cap.cval,cap.cpre,'F',4);
-  wait_about3s();	/* debug delay */
-#endif
   R_DDR = HiPinR_L; 		//switch R_L for High-Pin to GND
 #if F_CPU < 2000001
    if(cap.cval < 50)
@@ -435,7 +372,7 @@ messe_mit_rh:
    if(cap.cval < 25)
 #endif 
      {
-     // cap.cval can only be so little in pF unit, cap.cpre must not be testet!
+     // cap.cval can only be so little in pF unit, cap.cpre must not be tested!
 #if DebugOut == 10
      lcd_data('<');
      lcd_space();

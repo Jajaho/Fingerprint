@@ -118,7 +118,7 @@ COMMON unsigned int ref_mv;      //Reference-voltage  in mV units (as read with 
 COMMON unsigned int ref_mv_offs;       //Reference-voltage  in mV units with eeprom offset for C
 COMMON unsigned int adc_internal_reference;  //internal reference voltage of ADC in mV units
 COMMON unsigned int adc_vcc_reference;  // reference voltage of ADC,if switched to VCC in mV units
-COMMON  unsigned int RHmultip;	// Multiplier for capacity measurement with R_H (470KOhm)
+COMMON unsigned int RHmultip;	// Multiplier for capacity measurement with R_H (470KOhm)
 
 #ifdef WITH_MENU
 COMMON union t_frq{
@@ -146,7 +146,7 @@ COMMON struct cap_t {
 #endif
 
   uint8_t ca, cb;		//pins of capacitor
-  int8_t cpre;			//Prefix for capacitor value  -12=p, -9=n, -6=µ, -3=m
+  int8_t cpre;			//Prefix for capacitor value  -12=p, -9=n, -6=u, -3=m
   int8_t cpre_max;		//Prefix of the biggest capacitor
 } cap;
   COMMON unsigned int cell_mv[3];	//remaining load voltages after discharge cycle
@@ -186,7 +186,7 @@ COMMON uint8_t UnCalibrated;	// 0, if the tester is calibrated
 #ifdef WITH_ROTARY_SWITCH
  #define ROT_MSK 0x03		/* must be power of two - 1: 3,7,15 */
 struct Rotary_t {
- uint8_t state[(ROT_MSK+1)];	// coded state history of the rotatry switch, bit 0 == state of A-switch, bit 1 = state of B-switch
+ uint8_t state[(ROT_MSK+1)];	// coded state history of the rotary switch, bit 0 == state of A-switch, bit 1 = state of B-switch
  uint8_t ind;		// index to the last entry of the state history (rotary switch)
  int8_t count;		// count of right steps, negative if left steps
  uint8_t incre;		// absolute value of step count
