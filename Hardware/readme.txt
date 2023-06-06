@@ -1,0 +1,1 @@
+The lfcsp breakout pcb was initially developed in a different repo. See https://github.com/Jajaho/transistortester-scanner/tree/reset
