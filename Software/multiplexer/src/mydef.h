@@ -11,6 +11,16 @@
 
 #define BOARD_LED PB5
 
+// ADG726 Multiplexer
+// Chip Select (active low)
+#define NCSA PD2
+#define NCSB PD3
+// Logic Control 
+#define A0 PD4
+#define A1 PD5
+#define A2 PD6
+#define A3 PD7
+
 // MAKROS //
 
 #define SETBIT(port, pin) (port |= (1 << pin))

@@ -6,9 +6,9 @@
 
 int main(void) {
 
-    DDRB = (1 << PB5);
+    DDRB = (1 << BOARD_LED);
+    PORTB = (1 << BOARD_LED);
     //uart_init(); 
-    char string[9] = "";
     
     while (1) // main loop
     {
