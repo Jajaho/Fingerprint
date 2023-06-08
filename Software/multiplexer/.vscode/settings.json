@@ -1,7 +1,8 @@
 {
     "files.associations": {
         "transistortester.h": "c",
-        "stddef.h": "c"
+        "stddef.h": "c",
+        "mydef.h": "c"
     },
     "cmake.sourceDirectory": "/home/jakob/hiwi/tsc_proto/Software/multiplexer/src"
 }

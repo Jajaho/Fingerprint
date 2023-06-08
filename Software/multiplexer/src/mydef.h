@@ -1,5 +1,5 @@
-#ifndef STDDEF_H_
-#define STDDEF_H_
+#ifndef MYDEF_H_
+#define MYDEF_H_
 
 
 #define __AVR_ATmega328P__
