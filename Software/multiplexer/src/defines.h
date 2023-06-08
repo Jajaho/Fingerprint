@@ -3,8 +3,10 @@
 
 
 #define __AVR_ATmega328P__
-#define F_CPU 16000000UL
 
+// ----- CPU Clock Speed & BAUD ----- //
+// required for util/setbaud.h
+#define F_CPU 16000000UL
 #define BAUD 9600
 
 // Pins //

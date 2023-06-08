@@ -1,5 +1,6 @@
-#include "defines.h"
-#include <avr/io.h> // AVR device-specific IO definitions
+#include "defines.h"    // Global defines for the project
+#include <avr/io.h>     // AVR device-specific IO definitions
+#include "adg726.h"
 
 /// @brief Set DDR and PORT for ADG726  
 void adg726_init(void){
