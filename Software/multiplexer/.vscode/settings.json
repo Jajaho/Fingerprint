@@ -7,7 +7,8 @@
         "adg726.h": "c",
         "io.h": "c",
         "defines.h": "c",
-        "setbaud.h": "c"
+        "setbaud.h": "c",
+        "iom328p.h": "c"
     },
     "cmake.sourceDirectory": "/home/jakob/hiwi/tsc_proto/Software/multiplexer/src"
 }

@@ -9,14 +9,18 @@
  * Stdio demo, UART implementation
  *
  * $Id: uart.c 1008 2005-12-28 21:38:59Z joerg_wunsch $
+ * 
+ * Edited by Jakob Holz 2023
+ * Adjusted register names to ATmega328P
+ * Changed uart_init to use util/setbaud.h macros
  */
 
 #include "defines.h"
 
 #include <stdint.h>
 #include <stdio.h>
-
 #include <avr/io.h>
+#include <util/setbaud.h>
 
 #include "uart.h"
 
@@ -24,15 +28,23 @@
  * Initialize the UART to 9600 Bd, tx/rx, 8N1.
  */
 void
-uart_init(void)
-{
-#if F_CPU < 2000000UL && defined(U2X)
-  UCSRA = _BV(U2X);             /* improve baud rate error by using 2x clk */
-  UBRRL = (F_CPU / (8UL * UART_BAUD)) - 1;
-#else
-  UBRRL = (F_CPU / (16UL * UART_BAUD)) - 1;
-#endif
-  UCSRB = _BV(TXEN) | _BV(RXEN); /* tx/rx enable */
+uart_init(void){
+   UBRR0H = UBRRH_VALUE;
+   UBRR0L = UBRRL_VALUE;
+   #if USE_2X
+   UCSRA |= (1 << U2X0);
+   #else
+   UCSR0A &= ~(1 << U2X0);
+   #endif
+/*
+	#if F_CPU < 2000000UL && defined(U2X)
+	UCSRA = _BV(U2X);             // improve baud rate error by using 2x clk 
+	UBRRL = (F_CPU / (8UL * UART_BAUD)) - 1;
+	#else
+	UBRRL = (F_CPU / (16UL * UART_BAUD)) - 1;
+	#endif
+	UCSRB = _BV(TXEN) | _BV(RXEN); // tx/rx enable 
+*/
 }
 
 /*
@@ -51,8 +63,8 @@ uart_putchar(char c, FILE *stream)
 
   if (c == '\n')
     uart_putchar('\r', stream);
-  loop_until_bit_is_set(UCSRA, UDRE);
-  UDR = c;
+  loop_until_bit_is_set(UCSR0A, UDRE0);
+  UDR0 = c;
 
   return 0;
 }
@@ -101,12 +113,12 @@ uart_getchar(FILE *stream)
   if (rxp == 0)
     for (cp = b;;)
       {
-	loop_until_bit_is_set(UCSRA, RXC);
-	if (UCSRA & _BV(FE))
+	loop_until_bit_is_set(UCSR0A, RXC0);
+	if (UCSR0A & _BV(FE0))
 	  return _FDEV_EOF;
-	if (UCSRA & _BV(DOR))
+	if (UCSR0A & _BV(DOR0))
 	  return _FDEV_ERR;
-	c = UDR;
+	c = UDR0;
 	/* behaviour similar to Unix stty ICRNL */
 	if (c == '\r')
 	  c = '\n';
