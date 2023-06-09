@@ -11,33 +11,37 @@
 
 // Pins //
 
-#define BOARD_LED PB5
+#define BOARD_LED B, 5
+#define TTESTER_START B, 4
+#define TTESTER_RST B, 3
 
 // ----- ADG726 Multiplexer ------ //
+
 // State Control (active low) //
 #define ADG726_NEN D, 2     // Not Enable
 #define ADG726_NWR D, 3     // Not Write Enable
+
 // Chip Select (active low) //
 #define ADG726_NCSA B, 0    // Not Chip Select A
 #define ADG726_NCSB B, 1    // Not Chip Select B
-/* Logic Control 
-*  active high, should all be on the same port with ascending pin numbers
-*/
+
+// Logic Control 
+// active high, should all be on the same port with ascending pin numbers
 #define ADG726_A0 D, 4     
 #define ADG726_A1 D, 5
 #define ADG726_A2 D, 6
 #define ADG726_A3 D, 7
 
-// MAKROS //
+// ----- MAKROS ----- //
 
 // Hannes MAKROS //
-
 #define SETBIT(port, pin) (port |= (1 << pin))
 #define CLRBIT(port, pin) (port &= ~(1 << pin))
 #define BITSET(port, pin) (port&(1 << pin))
 
 #define LED_ON() SETBIT(PORTB, BOARD_LED)
 #define LED_OFF() CLRBIT(PORTB, BOARD_LED)
+
 
 // AVR LIBC MAKROS //
 // See: https://www.nongnu.org/avr-libc/examples/stdiodemo/hd44780.c

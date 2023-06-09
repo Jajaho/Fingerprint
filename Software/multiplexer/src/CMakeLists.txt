@@ -32,7 +32,7 @@ set(CMAKE_C_STANDARD  11)
 set(path_to)
 
 # --------- Sources --------- #
-set(SOURCES main.c multiplexer.c adg726.c)
+set(SOURCES main.c multiplexer.c adg726.c uart.c)
 
 # --------- Targets --------- #
 add_executable(${PROJECT_NAME} ${SOURCES})
