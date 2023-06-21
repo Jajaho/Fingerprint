@@ -55,7 +55,7 @@ AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
 AnnotateSuffix=
 AnnotateScope=All
-AnnotateOrder=-1
+AnnotateOrder=0
 DoLibraryUpdate=1
 DoDatabaseUpdate=1
 ClassGenCCAutoEnabled=1
@@ -66,7 +66,24 @@ GenerateClassCluster=0
 DocumentUniqueId=EXOYPTJR
 
 [Document2]
-DocumentPath=PCB1.PcbDoc
+DocumentPath=..\LFCSP_48_Breakout\Sheet2.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=BSXCWDUL
+
+[Document3]
+DocumentPath=DualMetroPrototyp.PcbDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -82,7 +99,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=JJAETVNA
 
-[Document3]
+[Document4]
 DocumentPath=DualMetro.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -99,7 +116,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=IXBJBIQW
 
-[Document4]
+[Document5]
 DocumentPath=DualMetro.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
