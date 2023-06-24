@@ -31,7 +31,7 @@ void adg726_disable(void){
 /// @brief Set ADG726 channel of chip A or B
 /// @param channel Either 'A', 'B' or 'D' for both channels
 /// @param source Source 1 to 12 respectively 
-void adg726_set_channel(uint8_t channel, uint8_t source) {
+void adg726_set_channel(uint8_t source, uint8_t channel) {
     // Channel selection 
     switch (channel)
     {
