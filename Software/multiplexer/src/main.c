@@ -18,20 +18,31 @@ int main(void) {
     char buf[20], s[20];
     char meausurement[8];
 
-    
+    // -------- Inits --------- //
 
     // Set pins as output
-    SET(DDR, BOARD_LED);
-    SET(DDR, START_BTN);
-    SET(DDR, TTESTER_START);
-    SET(DDR, TTESTER_RST);
+    SET(DDR, TTESTER_NSTART);
+    SET(DDR, TTESTER_NRST);
 
-    CLR(PORT, TTESTER_START);
-    _delay_ms(300);
-    SET(PORT, TTESTER_START);
-    /*
+    // Set pins as input
+    CLR(DDR, BOARD_LED);
+    CLR(DDR, START_BTN);
+
+    // Set initial I/O state
+    SET(PORT, TTESTER_NSTART);
+    SET(PORT, TTESTER_NRST);
+
     mux_init();
 
+    mux_set_channel('D', 15);
+
+    mux_enable();
+    CLR(PORT, TTESTER_NSTART);
+    _delay_ms(300);
+    SET(PORT, TTESTER_NSTART);
+    
+    
+    /*
     uart_init(); 
     // The default stdio streams stdin, stdout, and stderr are set up by using the existing static FILE stream objects.
     // allows to use the shorthand functions (e.g. printf() instead of fprintf())

@@ -2,7 +2,7 @@
 #include <avr/io.h>     // AVR device-specific IO definitions
 #include "adg726.h"
 
-/// @brief Set DDR and PORT for ADG726  
+/// @brief Set DDR and PORT for ADG726 to a known state, for measurement the device has to be enabled also
 void adg726_init(void){
     // Set pins as output
     SET(DDR, ADG726_NEN);
@@ -30,8 +30,8 @@ void adg726_disable(void){
 
 /// @brief Set ADG726 channel of chip A or B
 /// @param channel Either 'A', 'B' or 'D' for both channels
-/// @param source Source 1 to 12 respectively 
-void adg726_set_channel(uint8_t source, uint8_t channel) {
+/// @param source Source can be connected from 1 to 16, physical sources are numbered 1 to 16, but ADG726 communication is 0 to 15
+void adg726_set_channel(uint8_t channel, uint8_t source) {
     // Channel selection 
     switch (channel)
     {
@@ -48,7 +48,7 @@ void adg726_set_channel(uint8_t source, uint8_t channel) {
         CLR(PORT, ADG726_NCSA);
         CLR(PORT, ADG726_NCSB);
         break;
-    }
+    }  
 
     CLR(PORT, ADG726_NWR);  // Enable write mode
     SET(PORT, ADG726_NEN);  // Disable all channels
@@ -61,7 +61,7 @@ void adg726_set_channel(uint8_t source, uint8_t channel) {
     SET(PORT, ADG726_NWR);  
     // Min. 2ns Address, enable hold time
     CLR(PORT, ADG726_NEN);  // Enable all channels
-    ASSIGN(PORT, ADG726_A0, source);    // Clear control bits
+    //ASSIGN(PORT, ADG726_A0, 0);    // Clear control bits
     SET(PORT, ADG726_NCSA);  // Unselect channel A
     SET(PORT, ADG726_NCSB);  // Unselect channel B
 }

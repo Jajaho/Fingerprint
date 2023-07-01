@@ -9,12 +9,12 @@
 #define F_CPU 16000000UL
 #define BAUD 9600
 
-// Pins //
+// ----- Pin Definitions ----- //
 
 #define BOARD_LED B, 5
 #define START_BTN C, 2
-#define TTESTER_START C, 3
-#define TTESTER_RST C, 4
+#define TTESTER_NSTART C, 3		// Not Start
+#define TTESTER_NRST C, 4		// Not Reset
 
 // ----- ADG726 Multiplexer ------ //
 
@@ -59,7 +59,7 @@
 
 /* multy-bit macros, used to read or write entire registers */
 
-/// The data bits have to be in consequtive ascending order
+/// ASSIGN(PORT, FIRST_BIT, DATA) The data bits have to be in consequtive ascending order
 #define ASSIGN_(what, p, m, v) GLUE(what, p) = (GLUE(what, p) & \
 						~((1 << (m)) | (1 << ((m) + 1)) | \
 						  (1 << ((m) + 2)) | (1 << ((m) + 3)))) | \
