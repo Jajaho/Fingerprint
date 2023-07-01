@@ -34,9 +34,16 @@ int main(void) {
 
     mux_init();
 
-    mux_set_channel('D', 15);
+    mux_set_channel('D', 1);
 
     mux_enable();
+
+    CLR(PORT, TTESTER_NRST);
+    _delay_ms(300);
+    SET(PORT, TTESTER_NRST);
+
+    _delay_ms(1000);
+
     CLR(PORT, TTESTER_NSTART);
     _delay_ms(300);
     SET(PORT, TTESTER_NSTART);
