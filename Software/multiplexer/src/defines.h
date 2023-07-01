@@ -12,8 +12,9 @@
 // Pins //
 
 #define BOARD_LED B, 5
-#define TTESTER_START B, 4
-#define TTESTER_RST B, 3
+#define START_BTN C, 2
+#define TTESTER_START C, 3
+#define TTESTER_RST C, 4
 
 // ----- ADG726 Multiplexer ------ //
 

@@ -3,8 +3,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#include <avr/io.h> // AVR device-specific IO definitions
-#include <avr/delay.h> // Functions for busy-wait delay loops
+#include <avr/io.h>     // AVR device-specific IO definitions
+#include <avr/delay.h>  // Functions for busy-wait delay loops
 
 #include "uart.h"
 #include "multiplexer.h"
@@ -20,19 +20,15 @@ int main(void) {
 
     
 
-    // Set all output pins
+    // Set pins as output
     SET(DDR, BOARD_LED);
     SET(DDR, START_BTN);
     SET(DDR, TTESTER_START);
     SET(DDR, TTESTER_RST);
 
+    CLR(PORT, TTESTER_START);
+    _delay_ms(300);
     SET(PORT, TTESTER_START);
-
-    while (1)
-    {
-        _delay_ms(100);
-    }
-    
     /*
     mux_init();
 
@@ -62,4 +58,11 @@ int main(void) {
         fgets(meausurement, 8, buf);
     }
     */
+   while (1)
+    {
+        SET(PORT, BOARD_LED);
+        _delay_ms(500);
+        CLR(PORT, BOARD_LED);
+        _delay_ms(500);
+    }
 }
