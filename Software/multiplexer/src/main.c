@@ -14,6 +14,7 @@ FILE uart_str = FDEV_SETUP_STREAM(uart_putchar, uart_getchar, _FDEV_SETUP_RW);
 
 
 int main(void) {
+    
     uint8_t i;
     char buf[40], s[40];
     char meausurement[8];
@@ -23,24 +24,24 @@ int main(void) {
     // Set pins as output
     SET(DDR, TTESTER_NSTART);
     SET(DDR, TTESTER_NRST);
+    SET(DDR, BOARD_LED);
 
     // Set pins as input
-    CLR(DDR, BOARD_LED);
     CLR(DDR, START_BTN);
 
     // Set initial I/O state
     SET(PORT, TTESTER_NSTART);
     SET(PORT, TTESTER_NRST);
-
+    
     mux_init();
     uart_init(); 
 
     // The default stdio streams stdin, stdout, and stderr are set up (using the same buffer) by using the existing static FILE stream objects.
     // allows to use the shorthand functions (e.g. printf() instead of fprintf())
     stdout = stdin = &uart_str;
-
+    
     // -------- Main Program -------- //
-
+    
 
     mux_set_channel('D', 1);
     mux_enable();
@@ -54,15 +55,15 @@ int main(void) {
     CLR(PORT, TTESTER_NSTART);
     _delay_ms(300);
     SET(PORT, TTESTER_NSTART);
-
+    
    while (1)
     {
         
         
         // Reads string into internal buffer, returns NULL on error or when end of file occurs while no characters have been read.
-        if (fgets(buf, sizeof buf - 1, stdin) == NULL) {
+        if (fgets(buf, sizeof buf - 1, &uart_str) != NULL) {
                     SET(PORT, BOARD_LED);
-                    _delay_ms(1000);
+                    _delay_ms(100);
                     CLR(PORT, BOARD_LED);                       
         }  
         /*
