@@ -10,5 +10,6 @@
         "setbaud.h": "c",
         "iom328p.h": "c"
     },
-    "cmake.sourceDirectory": "/home/jakob/hiwi/tsc_proto/Software/multiplexer/src"
+    "cmake.sourceDirectory": "/home/jakob/hiwi/Fingerprint/Software/multiplexer/src",
+    "makefile.makefilePath": "build/"
 }

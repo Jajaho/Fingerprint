@@ -12,7 +12,14 @@
 // ----- Pin Definitions ----- //
 
 #define BOARD_LED B, 5
-#define START_BTN C, 2
+#define PCB_LED C, 0
+
+#define NSTART_BTN B, 2
+
+#define NSWITCH_1 C, 3
+#define NSWITCH_2 C, 4
+#define NSWITCH_3 C, 5
+
 #define TTESTER_NSTART C, 3		// Not Start
 #define TTESTER_NRST C, 4		// Not Reset
 
