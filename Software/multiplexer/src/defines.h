@@ -19,7 +19,9 @@
 
 #define NSWITCH_1 C, 3
 #define NSWITCH_2 C, 4
-#define NSWITCH_3 C, 5
+//#define NSWITCH_3 C, 5
+
+#define TTESTER_NMC C, 5
 
 #define TTESTER_NSTART C, 1		// Not Start
 #define TTESTER_NRST C, 2		// Not Reset
