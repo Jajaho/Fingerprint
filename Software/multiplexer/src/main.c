@@ -13,6 +13,10 @@
 // stdio stream initialization by _FDEV_SETUP_RW
 FILE uart_str = FDEV_SETUP_STREAM(uart_putchar, uart_getchar, _FDEV_SETUP_RW);
 
+uint8_t meas_complete_flag = 0;
+uint8_t start_flag = 0;
+
+uint8_t mode = 0;
 uint8_t channel = 0;
 
 int main(void) {
@@ -31,9 +35,9 @@ int main(void) {
     PCMSK0 |= (1 << PCINT2);            // Enable PCINT2 (PB2) for Pin Change Interrupt 0 (Start Button)
 
     PCICR |= (1 << PCIE1);              // Enable Pin Change Interrupt 1
-    PCMSK1 |= (1 << PCINT11);           // Enable PCINT11 (PC3) for Pin Change Interrupt 1
-    PCMSK1 |= (1 << PCINT12);           // Enable PCINT12 (PC4) for Pin Change Interrupt 1
-    PCMSK1 |= (0 << PCINT13);           // Enable PCINT13 (PC5) for Pin Change Interrupt 1
+    //PCMSK1 |= (1 << PCINT11);           // Enable PCINT11 (PC3) for Pin Change Interrupt 1
+    //PCMSK1 |= (1 << PCINT12);           // Enable PCINT12 (PC4) for Pin Change Interrupt 1
+    PCMSK1 |= (1 << PCINT13);           // Enable PCINT13 (PC5) for Pin Change Interrupt 1
 
 
     // Set pins as output
@@ -52,56 +56,71 @@ int main(void) {
     SET(PORT, NSTART_BTN);
     SET(PORT, NSWITCH_1);
     SET(PORT, NSWITCH_2);
-    SET(PORT, NSWITCH_3);
+    //SET(PORT, NSWITCH_3);
 
     // Set initial I/O state of ttester com-pins
-    SET(PORT, TTESTER_NSTART);
-    SET(PORT, TTESTER_NRST);
-
-    
+    CLR(PORT, TTESTER_NSTART); // LOW so the ttester shuts down after a single reading. HIGH for continuous reading every ~30s (for R) or ~33s (for C)
+    CLR(PORT, TTESTER_NRST);
+  
     mux_init();
-    // uart_init(); 
-
-
-    
-    // -------- Main Program -------- //
-    
-
-
-    mux_set_channel('D', 1);    // Set both channels to physcial numbner 1 
+    mux_set_channel('D', 0);
     mux_enable();
 
-    SET(PORT, PCB_LED);
-    CLR(PORT, PCB_LED);
-
-    CLR(PORT, TTESTER_NRST);
-    SET(PORT, TTESTER_NRST);
-
-    _delay_ms(1000);
-
-    //CLR(PORT, TTESTER_NSTART);
-    //_delay_ms(300);
-    //SET(PORT, TTESTER_NSTART);
-
-    SET(PORT, PCB_LED);
-    _delay_ms(300);
-    CLR(PORT, PCB_LED);
-    _delay_ms(300);
 
     sei();  // Enable global interrupts
 
     while (1)
     { 
-        if (channel == 1)
-        {
-            SET(PORT, BOARD_LED);
-            _delay_ms(200);
-            CLR(PORT, BOARD_LED);
-        }
-        _delay_ms(100);
-    }
+        /* SET(PORT, BOARD_LED);
+        _delay_ms(300);
+        CLR(PORT, BOARD_LED);
+        _delay_ms(700); */
 
-    /*
+        if (meas_complete_flag)
+        {
+                meas_complete_flag = 0;
+                SET(PORT, PCB_LED);
+                _delay_ms(1000);
+                _delay_ms(1000);
+                _delay_ms(1000);
+                _delay_ms(1000);
+                _delay_ms(1000);
+                CLR(PORT, PCB_LED);
+
+                channel++;
+                if (channel == 16) {
+                    channel = 0;
+                }
+                mux_set_channel('D', channel);
+                start_flag = 1;
+        }
+
+        if (start_flag)
+        {
+            start_flag = 0;
+            SET(PORT, PCB_LED);
+            CLR(PORT, TTESTER_NRST);
+            _delay_ms(400);
+            CLR(PORT, PCB_LED);
+            SET(PORT, TTESTER_NRST);
+        }
+        
+    }
+    
+}
+
+ISR(PCINT0_vect) {
+    start_flag = 1;
+}
+
+ISR(PCINT1_vect) {
+    meas_complete_flag = 1;
+    SET(PORT, BOARD_LED);
+}
+
+// Parkplatz
+
+/*
     // The default stdio streams stdin, stdout, and stderr are set up (using the same buffer) by using the existing static FILE stream objects.
     // allows to use the shorthand functions (e.g. printf() instead of fprintf())
     stdout = stdin = &uart_str;
@@ -143,19 +162,3 @@ int main(void) {
         _delay_ms(1000);
     }
     */
-}
-
-ISR(PCIE0_vect) {
-    SET(PORT, PCB_LED);
-    CLR(PORT, TTESTER_NSTART);
-
-    _delay_ms(300);
-
-    SET(PORT, TTESTER_NSTART);
-    CLR(PORT, PCB_LED);
-}
-
-ISR(PCIE1_vect) {
-    channel = (uint8_t) PORTC & 0b00111000;     // Read NSWITCH_1, NSWITCH_2 and NSWITCH_3 (LSB is switch 1, MSB is switch 3)
-
-}

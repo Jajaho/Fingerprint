@@ -28,9 +28,9 @@ void adg726_disable(void){
     SET(PORT, ADG726_NEN);
 }
 
-/// @brief Set ADG726 channel of chip A or B
+/// @brief Set ADG726 channel of chip A or B. The adg726 doesn't have to be diabled prior to this.
 /// @param channel Either 'A', 'B' or 'D' for both channels
-/// @param source Source can be connected from 1 to 16 because physical sources are numbered 1 to 16 
+/// @param source can be from 0 to 15, but physical sources are numbered 1 to 16 int the adg726 datasheet and on the pcb
 void adg726_set_channel(uint8_t channel, uint8_t source) {
     // Channel selection 
     switch (channel)
@@ -54,8 +54,8 @@ void adg726_set_channel(uint8_t channel, uint8_t source) {
     SET(PORT, ADG726_NEN);  // Disable all channels
 
     // Set logic control bits to select desired source
-    ASSIGN(PORT, ADG726_A0, source - 1);    
-    // Min. 5ns Address, enable setup time
+    ASSIGN(PORT, ADG726_A0, source);    
+    // Min. 5ns Address, enable setup time, one period of 16MHz clock is 62.5ns
 
     // Disable write mode, Input is latched on the rising edge of ADG726_NWR
     SET(PORT, ADG726_NWR);  
