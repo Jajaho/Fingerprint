@@ -10,6 +10,7 @@
 #define BAUD 9600
 
 // ----- Pin Definitions ----- //
+// for DualMetroPrototype V1.0 
 
 #define BOARD_LED B, 5
 #define PCB_LED C, 0
@@ -20,8 +21,8 @@
 #define NSWITCH_2 C, 4
 #define NSWITCH_3 C, 5
 
-#define TTESTER_NSTART C, 3		// Not Start
-#define TTESTER_NRST C, 4		// Not Reset
+#define TTESTER_NSTART C, 1		// Not Start
+#define TTESTER_NRST C, 2		// Not Reset
 
 // ----- ADG726 Multiplexer ------ //
 
