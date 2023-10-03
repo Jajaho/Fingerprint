@@ -75,23 +75,27 @@ int main(void) {
     // - ttester is held in reset
     // - global interrupts are enabled
 
-    while (1)
-    { 
+     
         auto_mode = BITSET(PINC,3);     // NSWITCH_1
 
         if (auto_mode == 1)
         {
             SET(PORT, BOARD_LED);
+            MCUCR |= (1 << IVCE);
             PCICR |= (1 << PCIE1);              // Enable Pin Change Interrupt 1
+            MCUCR |= (0 << IVCE);
             SET(PORT, TTESTER_NSTART);          // HIGH for continuous reading every ~30s (for R) or ~33s (for C)
         }
-        /* else {
+        else {
             CLR(PORT, BOARD_LED);
-            PCICR |= (0 << PCIE1);              // Enable Pin Change Interrupt 1
+            MCUCR |= (1 << IVCE);
+            PCICR |= (0 << PCIE1);              // Disable Pin Change Interrupt 1
+            MCUCR |= (0 << IVCE);
             CLR(PORT, TTESTER_NSTART);          // LOW so the ttester shuts down after a single reading
-        } */
+        } 
         
-
+    while (1)
+    {
         if (auto_iterate_flag)
         {
             auto_iterate_flag = 0;
