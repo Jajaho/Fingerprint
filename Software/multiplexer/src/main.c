@@ -12,10 +12,10 @@
 
 
 
-uint8_t meas_complete_flag = 0;
+uint8_t auto_iterate_flag = 0;
 uint8_t start_flag = 0;
 
-uint8_t continues_mode = 0;
+uint8_t auto_mode = 0;
 uint8_t channel = 0;
 
 int main(void) {
@@ -77,14 +77,27 @@ int main(void) {
 
     while (1)
     { 
-        continues_mode = PINC3;     // NSWITCH_1
+        auto_mode = BITSET(PINC,3);     // NSWITCH_1
 
-        if (meas_complete_flag)
+        if (auto_mode == 1)
         {
-            meas_complete_flag = 0;
             SET(PORT, BOARD_LED);
-            _delay_ms(400);
+            PCICR |= (1 << PCIE1);              // Enable Pin Change Interrupt 1
+            SET(PORT, TTESTER_NSTART);          // HIGH for continuous reading every ~30s (for R) or ~33s (for C)
+        }
+        /* else {
             CLR(PORT, BOARD_LED);
+            PCICR |= (0 << PCIE1);              // Enable Pin Change Interrupt 1
+            CLR(PORT, TTESTER_NSTART);          // LOW so the ttester shuts down after a single reading
+        } */
+        
+
+        if (auto_iterate_flag)
+        {
+            auto_iterate_flag = 0;
+            /* SET(PORT, BOARD_LED);
+            _delay_ms(400);
+            CLR(PORT, BOARD_LED); */
 
             _delay_ms(1000);
             _delay_ms(1000);
@@ -96,7 +109,6 @@ int main(void) {
             _delay_ms(1000);
             _delay_ms(1000);
             _delay_ms(1000);
-
 
             channel++;
             if (channel == 16) {
@@ -104,18 +116,18 @@ int main(void) {
             }
 
             mux_set_channel('D', channel);
-            if(continues_mode) {
-                start_flag = 1;
-            }  
         }
 
         if (start_flag)
         {
             start_flag = 0;
-            SET(PORT, PCB_LED);
+
             CLR(PORT, TTESTER_NRST);
+
+            SET(PORT, PCB_LED);
             _delay_ms(400);
             CLR(PORT, PCB_LED);
+
             SET(PORT, TTESTER_NRST);
         }
         _delay_ms(200);
@@ -128,7 +140,7 @@ ISR(PCINT0_vect) {
 }
 
 ISR(PCINT1_vect) {
-    meas_complete_flag = 1;
+    auto_iterate_flag = 1;
 }
 
 // Parkplatz
