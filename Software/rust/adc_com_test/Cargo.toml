@@ -1,0 +1,18 @@
+[package]
+name = "adc_com_test"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# newest versions as of 07.07.2022
+rp-pico = "0.4.1"
+panic-halt = "0.2.0"
+# usb
+usb-device = "0.2.8"
+usbd-serial = "0.1.1"
+cortex-m-rt = "0.7.1"
+# adc
+embedded-hal = "0.2.7"
+rp2040-hal = "0.5.0"
